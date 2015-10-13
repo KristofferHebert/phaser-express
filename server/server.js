@@ -9,32 +9,33 @@ let app = express()
 let tokens = new Tokens()
 let secret = tokens.secretSync()
 let token = tokens.create(secret)
-let hbs = handlebars({defaultLayout: false, extname: '.hbs'})
+let hbs = handlebars({
+	defaultLayout: false,
+	extname: '.hbs'
+})
 
-app.use(express.static(__dirname + '/public'))
 app.engine('.hbs', hbs);
 app.set('view engine', '.hbs')
 app.enable('view cache');
 
-
-
+app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.json({
-    limit: '100kb'
+	limit: '100kb'
 }))
 
 
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
 
-    let options = {
-            token: token
-        }
+	let options = {
+		token: token
+	}
 
-    res.render('index', options)
+	res.render('index', options)
 })
 
 
 console.log('Listening on port 3000')
-app.listen(3000)
+let server = app.listen(3000)
 
-export default app
+export default server

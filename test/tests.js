@@ -8,7 +8,9 @@ describe('loading express', function() {
 		server = require('../server/server')
 	})
 	afterEach(function(done) {
-		server.close(done)
+		server.close(function () {
+			done()
+		})
 	})
 	it('responds to /', function testSlash(done) {
 		request(server)
