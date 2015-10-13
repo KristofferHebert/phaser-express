@@ -23,8 +23,6 @@ app.use(bodyParser.json({
 	limit: '100kb'
 }))
 
-
-
 app.get('/', function(req, res) {
 
 	let options = {
@@ -34,6 +32,13 @@ app.get('/', function(req, res) {
 	res.render('index', options)
 })
 
+app.get('/scores', function(req, res){
+    res.sendStatus(500)
+})
+
+app.post('/scores', function(req, res){
+    res.sendStatus(500)
+})
 
 console.log('Listening on port 3000')
 let server = app.listen(3000)

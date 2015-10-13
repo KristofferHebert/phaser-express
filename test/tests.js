@@ -17,6 +17,16 @@ describe('loading express', function() {
 			.get('/')
 			.expect(200, done)
 	})
+	it('responds 500 to get scores', function testScores(done) {
+		request(server)
+			.get('/scores')
+			.expect(500, done)
+	})
+	it('responds 500 to post scores', function testScores(done) {
+		request(server)
+			.post('/scores')
+			.expect(500, done)
+	})
 	it('404 everything else', function testPath(done) {
 		request(server)
 			.get('/foo/bar')
