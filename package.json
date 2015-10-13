@@ -1,0 +1,36 @@
+{
+  "name": "phaser-express",
+  "version": "1.0.0",
+  "description": "Phaser HTML5 Game powered by Express",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec tests/index.js ",
+    "dev": "pm2-dev   ndex.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KristofferHebert/phaser-express.git"
+  },
+  "keywords": [
+    "Phaser",
+    "Express"
+  ],
+  "author": "Kristoffer Hebert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KristofferHebert/phaser-express/issues"
+  },
+  "homepage": "https://github.com/KristofferHebert/phaser-express#readme",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "csrf": "^3.0.0",
+    "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "pm2": "^0.15.7",
+    "really-need": "^1.6.3",
+    "supertest": "^1.1.0"
+  }
+}
