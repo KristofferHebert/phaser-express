@@ -7,6 +7,7 @@ import jsonFile from 'jsonfile'
 import util from 'util'
 import Tokens from 'csrf'
 
+// Configuration
 let app = express()
 let tokens = new Tokens()
 let secret = tokens.secretSync()
@@ -19,12 +20,12 @@ let hbs = handlebars({
 app.engine('.hbs', hbs);
 app.set('view engine', '.hbs')
 app.enable('view cache');
-
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.json({
 	limit: '100kb'
 }))
 
+// Routes
 app.get('/', function(req, res) {
 
 	let options = {
