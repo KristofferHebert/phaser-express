@@ -3,6 +3,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import handlebars from 'express-handlebars'
+import jsonFile from 'jsonfile'
+import util from 'util'
 import Tokens from 'csrf'
 
 let app = express()
@@ -33,7 +35,8 @@ app.get('/', function(req, res) {
 })
 
 app.get('/scores', function(req, res){
-    res.sendStatus(500)
+	let scores = jsonFile.readFileSync('./public/scores.json')
+	res.json(scores)
 })
 
 app.post('/scores', function(req, res){
