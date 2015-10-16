@@ -37,7 +37,8 @@ app.get('/', function(req, res) {
 
 // Middleware
 function checkToken(req, res, next){
-	if (!tokens.verify(secret, token)) {
+	let reqToken = req.body.csrf
+	if (!tokens.verify(secret, reqToken)) {
   		return res.status(500)
 			.send({
 				error: "Invalid Token"
@@ -46,14 +47,14 @@ function checkToken(req, res, next){
 	next()
 }
 
-app.get('/scores', function(req, res){
+function getScores(req, res){
 	let scores = jsonFile.readFileSync('./public/scores.json')
 	res.json(scores)
-})
+}
 
-app.post('/scores', checkToken, function(req, res){
-    res.sendStatus(500)
-})
+app.get('/scores', getScores)
+
+app.post('/scores', checkToken, getScores)
 
 console.log('Listening on port 3000')
 let server = app.listen(3000)
