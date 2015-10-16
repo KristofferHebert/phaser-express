@@ -17,10 +17,12 @@ describe('loading express', ()=> {
 			.get('/')
 			.expect(200, done)
 	})
-	it('responds 500 to get scores', (done) => {
+	it('responds 200 to get scores with json', (done) => {
 		request(server)
 			.get('/scores')
-			.expect(500, done)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200, done)
 	})
 	it('responds 500 to post scores', (done) => {
 		request(server)

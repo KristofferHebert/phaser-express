@@ -35,12 +35,23 @@ app.get('/', function(req, res) {
 	res.render('index', options)
 })
 
+// Middleware
+function checkToken(req, res, next){
+	if (!tokens.verify(secret, token)) {
+  		return res.status(500)
+			.send({
+				error: "Invalid Token"
+			})
+	}
+	next()
+}
+
 app.get('/scores', function(req, res){
 	let scores = jsonFile.readFileSync('./public/scores.json')
 	res.json(scores)
 })
 
-app.post('/scores', function(req, res){
+app.post('/scores', checkToken, function(req, res){
     res.sendStatus(500)
 })
 
