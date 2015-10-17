@@ -52,9 +52,13 @@ function getScores(req, res){
 	res.json(scores)
 }
 
+function writeScores(req, res){
+	res.json()
+}
+
 app.get('/scores', getScores)
 
-app.post('/scores', checkToken, getScores)
+app.post('/scores', checkToken, writeScores)
 
 console.log('Listening on port 3000')
 let server = app.listen(3000)
