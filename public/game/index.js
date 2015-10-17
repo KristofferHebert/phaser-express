@@ -1,9 +1,20 @@
-var screen = {
-  w: window.innerWidth,
-  h: window.innerHeight,
-};
+var CONFIG = {
+    screen: {
+      w: 600,
+      h: 850,
+    },
+    margin: {
+        up: 120,
+        down: 130,
+        left: 76,
+        right: 76
+    },
+    player : {
+        speed: 1000
+    }
+}
 
-var game = new Phaser.Game(screen.w, screen.h, Phaser.AUTO, 'game', {
+var game = new Phaser.Game(CONFIG.screen.w, CONFIG.screen.h, Phaser.AUTO, 'game', {
   preload: preload,
   create: create,
   update: update
@@ -13,48 +24,17 @@ var game = new Phaser.Game(screen.w, screen.h, Phaser.AUTO, 'game', {
 function preload() {
   console.log("PRELOAD");
 
+  game.load.spritesheet('player', 'game/spaceman.png', 16, 16);
   game.load.atlas('breakout', '/game/games/breakout/breakout.png', 'game/games/breakout/breakout.json');
-
-  game.load.image('starfield', '/game/bg/starfield.jpg');
-
-  game.load.spritesheet('player', 'game/sprites/spaceman.png', 16, 16);
-
-  game.load.spritesheet('cabinet', 'game/sprites/cabinet.png', 35, 54);
-
-  game.load.spritesheet('open_cabinet', 'game/sprites/open_cabinet.png', 33, 58);
-
-  game.load.spritesheet('garbage', 'game/sprites/garbage.png', 34, 30);
-
-  game.load.spritesheet('ironing_board', 'game/sprites/ironing_board.png', 88, 38);
-
-  game.load.spritesheet('mjtree', 'game/sprites/mjtree.png', 66, 57);
-
-  game.load.spritesheet('pan', 'game/sprites/pan.png', 30, 29);
-
-  game.load.spritesheet('phonebooth', 'game/sprites/phonebooth.png', 21, 29);
+  game.load.image('bg', '/game/bg.gif');
 
   //  Firefox doesn't support mp3 files, so use ogg
   game.load.audio('boden', ['game/audio/main.mp3', 'game/audio/main.ogg']);
-  game.load.audio('getdrug',['game/audio/sfx/drug.mp3','game/audio/sfx/drug.ogg']);
+  game.load.audio('getpotion',['game/audio/sfx/potion.mp3','game/audio/sfx/potion.ogg']);
 }
 
 var player;
-
-var cabinet;
-
-var open_cabinet;
-
-var garbage;
-
-var ironing_board;
-
-var mjtree;
-
-var pan;
-
-var phonebooth;
-
-var drugs;
+var potions;
 
 var lives = 3;
 var score = 0;
@@ -66,9 +46,9 @@ var timeText;
 var playTime = 2; //in minutes
 var currentTime = "1:00";
 
-var drugTypes = ["meth", "weed", "lsd", "cocaine"];
+var potionTypes = ["meth", "weed", "lsd", "cocaine"];
 
-var druggetsound;
+var potiongetsound;
 var s;
 var music;
 var speed = 4;
@@ -77,7 +57,7 @@ function create() {
   console.log("CREATE");
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
-  // s = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+  game.add.tileSprite(0, 0, 600, 850, 'bg');
 
   game.stage.backgroundColor = '#000000';
 
@@ -86,32 +66,39 @@ function create() {
   music.loop = true;
   music.play();
 
-  druggetsound = game.add.audio('getdrug', true);
+  potiongetsound = game.add.audio('getpotion', true);
 
   // NOTE: Drug Setup
-  drugs = game.add.group();
-  drugs.enableBody = true;
-  drugs.physicsBodyType = Phaser.Physics.ARCADE;
+  potions = game.add.group();
+  potions.enableBody = true;
+  potions.physicsBodyType = Phaser.Physics.ARCADE;
 
-  var drug;
+  var potion;
 
   for (var i = 0; i < 8; i++) {
     var num = getRandomInt(1, 4);
-    drug = drugs.create(game.world.randomX, game.world.randomY, 'breakout', 'brick_' + num + '_1.png');
-    drug.body.bounce.set(1);
-    drug.body.immovable = true;
-    drug.type = drugTypes[num - 1];
+    var minX = CONFIG.margin.left
+    var maxX = CONFIG.screen.w - CONFIG.margin.left
+    var randomX = getRandomInt(minX, maxX)
+    var minY = CONFIG.margin.up
+    var maxY = CONFIG.screen.h - CONFIG.margin.down
+    var randomY = getRandomInt(minY, maxY)
+
+    potion = potions.create(randomX, randomY, 'breakout', 'brick_' + num + '_1.png');
+    potion.body.bounce.set(1);
+    potion.body.immovable = true;
+    potion.type = potionTypes[num - 1];
   }
 
   // NOTE: Player Setup
   player = game.add.sprite(game.world.centerX, game.world.centerY, 'player', 1);
-  cabinet = game.add.sprite(game.world.centerX, game.world.centerY, 'cabinet', 1);
-  open_cabinet = game.add.sprite(game.world.randomX, game.world.randomY, 'open_cabinet', 1);
-  garbage = game.add.sprite(game.world.randomX, game.world.randomY, 'garbage', 1);
-  ironing_board = game.add.sprite(game.world.randomX, game.world.randomY, 'ironing_board', 1);
-  mjtree = game.add.sprite(game.world.randomX, game.world.randomY, 'mjtree', 1);
-  pan = game.add.sprite(game.world.randomX, game.world.randomY, 'pan', 1);
-  phonebooth = game.add.sprite(game.world.randomX, game.world.randomY, 'phonebooth', 1);
+  // cabinet = game.add.sprite(game.world.centerX, game.world.centerY, 'cabinet', 1);
+  // open_cabinet = game.add.sprite(game.world.randomX, game.world.randomY, 'open_cabinet', 1);
+  // garbage = game.add.sprite(game.world.randomX, game.world.randomY, 'garbage', 1);
+  // ironing_board = game.add.sprite(game.world.randomX, game.world.randomY, 'ironing_board', 1);
+  // mjtree = game.add.sprite(game.world.randomX, game.world.randomY, 'mjtree', 1);
+  // pan = game.add.sprite(game.world.randomX, game.world.randomY, 'pan', 1);
+  // phonebooth = game.add.sprite(game.world.randomX, game.world.randomY, 'phonebooth', 1);
 
   left = player.animations.add('left', [8, 9], 10, true);
   right = player.animations.add('right', [1, 2], 10, true);
@@ -131,7 +118,7 @@ function create() {
 
   // NOTE: Score Text Setup
 
-  scoreText = game.add.text(32, 550, 'score: 0', {
+  scoreText = game.add.text(32, 810, 'score: 0', {
     font: "20px Arial",
     fill: "#ffffff",
     align: "left"
@@ -144,6 +131,7 @@ function create() {
     fill: "#ffffff",
     align: "center"
   });
+
   endgameText = game.add.text(game.world.centerX, 400, '- Start Moving! -', {
     font: "40px Arial",
     fill: "#ffffff",
@@ -176,24 +164,24 @@ function update() {
 
   moving = false;
 
-  if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) && player.x > 0) {
+  if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) && player.x > CONFIG.margin.left) {
     player.x -= speed;
     // player.body.velocity.x = -speed;
     player.play('left');
     moving = true;
-  } else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) && player.x < screen.w) {
+} else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) && player.x < CONFIG.screen.w - CONFIG.margin.right) {
     player.x += speed;
     // player.body.velocity.x = speed;
     player.play('right');
     moving = true;
   }
 
-  if (game.input.keyboard.isDown(Phaser.Keyboard.UP) && player.y > 0) {
+  if (game.input.keyboard.isDown(Phaser.Keyboard.UP) && player.y > CONFIG.margin.up) {
     player.y -= speed;
     // player.body.velocity.y = -speed;
     player.play('up');
     moving = true;
-  } else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN) && player.y < screen.h) {
+} else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN) && player.y < CONFIG.screen.h - CONFIG.margin.down) {
     player.y += speed;
     // player.body.velocity.y = speed;
     player.play('down');
@@ -201,15 +189,14 @@ function update() {
   }
 
   if (moving) {
-    game.stage.backgroundColor = getRandomColor();
     playerMoved();
   } else {
     player.animations.stop();
   }
 
-  game.physics.arcade.overlap(player, drugs, playerHitdrug, null, this);
+  game.physics.arcade.overlap(player, potions, playerHitpotion, null, this);
 
-  timeText.text = 'Time Left: ' + currentTime;
+  //timeText.text = 'Time Left: ' + currentTime;
 
 }
 
@@ -223,25 +210,25 @@ function gameOver() {
 
 }
 
-function playerHitdrug(_player, _drug) {
+function playerHitpotion(_player, _potion) {
   console.log('Collision!');
-  console.log(_drug.type);
-  _drug.kill();
+  console.log(_potion.type);
+  _potion.kill();
 
   score += 10;
 
   scoreText.text = 'score: ' + score;
-  druggetsound.play();
+  potiongetsound.play();
 
-  //  Are they any drugs left?
-  if (drugs.countLiving() === 0) {
+  //  Are they any potions left?
+  if (potions.countLiving() === 0) {
     //  New level starts
     score += 1000;
     scoreText.text = 'score: ' + score;
     // introText.text = '- Next Level -';
 
-    //  And bring the drugs back from the dead :)
-    drugs.callAll('revive');
+    //  And bring the potions back from the dead :)
+    potions.callAll('revive');
   }
 }
 
