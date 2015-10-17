@@ -29,7 +29,7 @@ function preload() {
   game.load.image('bg', '/game/bg.gif');
 
   //  Firefox doesn't support mp3 files, so use ogg
-  game.load.audio('boden', ['game/audio/main.mp3', 'game/audio/main.ogg']);
+  game.load.audio('boden', ['/game/main.mp3', '/game/main.ogg']);
   game.load.audio('getpotion',['game/audio/sfx/potion.mp3','game/audio/sfx/potion.ogg']);
 }
 
