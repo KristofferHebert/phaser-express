@@ -8,19 +8,22 @@ import util from 'util'
 import Tokens from 'csrf'
 
 // Configuration
-let app = express()
-let tokens = new Tokens()
-let secret = tokens.secretSync()
-let token = tokens.create(secret)
-let hbs = handlebars({
+const app = express()
+const tokens = new Tokens()
+const secret = tokens.secretSync()
+const token = tokens.create(secret)
+const hbs = handlebars({
 	defaultLayout: false,
 	extname: '.hbs'
 })
 
-app.engine('.hbs', hbs);
+const ROOT = process.env.PWD
+const DB = './public/scores.json'
+
+app.engine('.hbs', hbs)
 app.set('view engine', '.hbs')
-app.enable('view cache');
-app.use(express.static(__dirname + '/public'))
+app.enable('view cache')
+app.use(express.static(ROOT + '/public'))
 app.use(bodyParser.json({
 	limit: '100kb'
 }))
@@ -48,12 +51,28 @@ function checkToken(req, res, next){
 }
 
 function getScores(req, res){
-	let scores = jsonFile.readFileSync('./public/scores.json')
-	res.json(scores)
+	let scores = jsonFile.readFileSync(DB)
+	return res.json(scores)
 }
 
 function writeScores(req, res){
-	res.json()
+	let {names, scores} =  req.body
+
+	if(names && scores){
+		let newScores = {
+				names: names,
+				scores: scores
+			}
+
+		json.writeFileSync(DB, newScores)
+
+		return getScores(req, res)
+	}
+
+	return res.status(500)
+		.send({
+			error: "Invalid Request"
+	})
 }
 
 app.get('/scores', getScores)

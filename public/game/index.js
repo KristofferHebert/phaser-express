@@ -13,29 +13,29 @@ var game = new Phaser.Game(screen.w, screen.h, Phaser.AUTO, 'game', {
 function preload() {
   console.log("PRELOAD");
 
-  game.load.atlas('breakout', '/assets/games/breakout/breakout.png', 'assets/games/breakout/breakout.json');
+  game.load.atlas('breakout', '/game/games/breakout/breakout.png', 'game/games/breakout/breakout.json');
 
-  game.load.image('starfield', '/assets/bg/starfield.jpg');
+  game.load.image('starfield', '/game/bg/starfield.jpg');
 
-  game.load.spritesheet('player', 'assets/sprites/spaceman.png', 16, 16);
+  game.load.spritesheet('player', 'game/sprites/spaceman.png', 16, 16);
 
-  game.load.spritesheet('cabinet', 'assets/sprites/cabinet.png', 35, 54);
+  game.load.spritesheet('cabinet', 'game/sprites/cabinet.png', 35, 54);
 
-  game.load.spritesheet('open_cabinet', 'assets/sprites/open_cabinet.png', 33, 58);
+  game.load.spritesheet('open_cabinet', 'game/sprites/open_cabinet.png', 33, 58);
 
-  game.load.spritesheet('garbage', 'assets/sprites/garbage.png', 34, 30);
+  game.load.spritesheet('garbage', 'game/sprites/garbage.png', 34, 30);
 
-  game.load.spritesheet('ironing_board', 'assets/sprites/ironing_board.png', 88, 38);
+  game.load.spritesheet('ironing_board', 'game/sprites/ironing_board.png', 88, 38);
 
-  game.load.spritesheet('mjtree', 'assets/sprites/mjtree.png', 66, 57);
+  game.load.spritesheet('mjtree', 'game/sprites/mjtree.png', 66, 57);
 
-  game.load.spritesheet('pan', 'assets/sprites/pan.png', 30, 29);
+  game.load.spritesheet('pan', 'game/sprites/pan.png', 30, 29);
 
-  game.load.spritesheet('phonebooth', 'assets/sprites/phonebooth.png', 21, 29);
+  game.load.spritesheet('phonebooth', 'game/sprites/phonebooth.png', 21, 29);
 
   //  Firefox doesn't support mp3 files, so use ogg
-  game.load.audio('boden', ['assets/audio/main.mp3', 'assets/audio/main.ogg']);
-  game.load.audio('getdrug',['assets/audio/sfx/drug.mp3','assets/audio/sfx/drug.ogg']);
+  game.load.audio('boden', ['game/audio/main.mp3', 'game/audio/main.ogg']);
+  game.load.audio('getdrug',['game/audio/sfx/drug.mp3','game/audio/sfx/drug.ogg']);
 }
 
 var player;
@@ -279,7 +279,7 @@ function startTimer(duration) {
 
   setInterval(function() {
     if (!outOfTime) {
-      console.log("EI RUNNING!!");
+      console.log("RUNNING!!");
       minutes = parseInt(timer / 60, 10);
       seconds = parseInt(timer % 60, 10);
 
