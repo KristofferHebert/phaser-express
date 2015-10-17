@@ -92,13 +92,6 @@ function create() {
 
   // NOTE: Player Setup
   player = game.add.sprite(game.world.centerX, game.world.centerY, 'player', 1);
-  // cabinet = game.add.sprite(game.world.centerX, game.world.centerY, 'cabinet', 1);
-  // open_cabinet = game.add.sprite(game.world.randomX, game.world.randomY, 'open_cabinet', 1);
-  // garbage = game.add.sprite(game.world.randomX, game.world.randomY, 'garbage', 1);
-  // ironing_board = game.add.sprite(game.world.randomX, game.world.randomY, 'ironing_board', 1);
-  // mjtree = game.add.sprite(game.world.randomX, game.world.randomY, 'mjtree', 1);
-  // pan = game.add.sprite(game.world.randomX, game.world.randomY, 'pan', 1);
-  // phonebooth = game.add.sprite(game.world.randomX, game.world.randomY, 'phonebooth', 1);
 
   left = player.animations.add('left', [8, 9], 10, true);
   right = player.animations.add('right', [1, 2], 10, true);
@@ -118,7 +111,7 @@ function create() {
 
   // NOTE: Score Text Setup
 
-  scoreText = game.add.text(32, 810, 'score: 0', {
+  scoreText = game.add.text(20, 805, 'score: 0', {
     font: "20px Arial",
     fill: "#ffffff",
     align: "left"
@@ -126,8 +119,8 @@ function create() {
 
   startTimer(60 * playTime);
 
-  timeText = game.add.text(game.world.centerX - 110, 10, 'Time Left ' + currentTime, {
-    font: "40px Arial",
+  timeText = game.add.text(460, 805, 'Time Left ' + currentTime, {
+    font: "20px Arial",
     fill: "#ffffff",
     align: "center"
   });
