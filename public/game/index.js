@@ -3,7 +3,7 @@ var screen = {
   h: window.innerHeight,
 };
 
-var game = new Phaser.Game(screen.w, screen.h, Phaser.AUTO, 'highOnLife', {
+var game = new Phaser.Game(screen.w, screen.h, Phaser.AUTO, 'game', {
   preload: preload,
   create: create,
   update: update
@@ -152,12 +152,6 @@ function create() {
   endgameText.anchor.setTo(0.5, 0.5);
   startTimer(60 * playTime);
 
-  game.plugins.screenShake = game.plugins.add(Phaser.Plugin.ScreenShake);
-
-  game.plugins.screenShake.setup({
-     shakeX: true,
-     shakeY: true
-    });
 }
 
 /**
@@ -238,8 +232,6 @@ function playerHitdrug(_player, _drug) {
 
   scoreText.text = 'score: ' + score;
   druggetsound.play();
-  //Shake camera
-  game.plugins.screenShake.shake(100);
 
   //  Are they any drugs left?
   if (drugs.countLiving() === 0) {
