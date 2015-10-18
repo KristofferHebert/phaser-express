@@ -11,7 +11,8 @@ var CONFIG = {
     },
     player : {
         speed: 5
-    }
+    },
+    timeText: null
 }
 
 var game = new Phaser.Game(CONFIG.screen.w, CONFIG.screen.h, Phaser.AUTO, 'game', {
@@ -30,11 +31,8 @@ function preload() {
   game.load.spritesheet('greenpotion', '/game/green-potion.png', 32, 32)
   game.load.spritesheet('yellowpotion', '/game/yellow-potion.png', 32, 32)
 
-  game.load.atlas('breakout', '/game/games/breakout/breakout.png', 'game/games/breakout/breakout.json')
-
   game.load.image('bg', '/game/bg.gif')
 
-  //  Firefox doesn't support mp3 files, so use ogg
   game.load.audio('music', ['/game/main.mp3', '/game/main.ogg'])
   game.load.audio('getpotion',['/game/coin.wav'])
 }
@@ -45,10 +43,8 @@ var potions
 var score = 0
 
 var scoreText
-var livesText
-var timeText
 
-var playTime = 2 //in minutes
+var playTime = 0.1 //in minutes
 var currentTime = "1:00"
 
 var potionTypes = ["green", "yellow", "red"]
@@ -58,6 +54,15 @@ var s
 var music
 
 var potion
+
+
+function getRedPotion(potion){
+    potion = potions.create(randomX, randomY, 'redpotion')
+    potion.body.bounce.set(1)
+    potion.body.immovable = true
+    potion.type = 'red'
+    return potion
+}
 
 function generatePotions(potion){
     for (var i = 0; i < 10; i++) {
@@ -77,11 +82,14 @@ function generatePotions(potion){
     }
 
     potion = potions.create(randomX, randomY, 'redpotion')
-    potion = potions.create(randomX, randomY, 'redpotion')
-    potion = potions.create(randomX, randomY, 'redpotion')
+    potion.body.bounce.set(1)
+    potion.body.immovable = true
+    potion.type = 'red'
 
     return potion
 }
+
+
 
 function create() {
   console.log("CREATE")
@@ -136,7 +144,7 @@ function create() {
 
   startTimer(60 * playTime)
 
-  timeText = game.add.text(460, 805, 'Time Left ' + currentTime, {
+  CONFIG.timeText = game.add.text(440, 805, 'Time Left ' + currentTime, {
     font: "20px Arial",
     fill: "#ffffff",
     align: "center"
@@ -152,26 +160,9 @@ function create() {
 
 }
 
-/**
-  Return random Color
-*/
-function getRandomColor() {
-  var letters = '0123456789ABCDEF'.split('')
-  var color = '#'
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)]
-  }
-  return color
-}
-
 var moving = false
 
 function update() {
-  // Check is left and is in bound
-  // console.log(player.x)
-  // console.log(player.y)
-  // player.body.velocity.set(0)
-
   moving = false
 
   if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) && player.x > CONFIG.margin.left) {
@@ -202,22 +193,17 @@ function update() {
 
   game.physics.arcade.overlap(player, potions, playerHitpotion, null, this)
 
-  //timeText.text = 'Time Left: ' + currentTime
+  CONFIG.timeText.text = 'Time Left: ' + currentTime
 
 }
 
 function gameOver() {
-  console.log('Called gameOver')
-  // endgameText.text = "- Game Over! -"
-  // endgameText.visible = true
-
-  // TODO: add end of game shit
-
-
+  endgameText.text = "- Game Over! -"
+  endgameText.visible = true
+  game.paused = true
 }
 
 function playerHitpotion(_player, _potion) {
-
   effects[_potion.type]()
   _potion.kill()
 
@@ -239,21 +225,15 @@ function playerHitpotion(_player, _potion) {
   }
 }
 
-// Drug Effects
-
-
-
 effects = {
     "red": function red() {
       CONFIG.player.speed = 3
     },
     "yellow": function yellow() {
-
-      CONFIG.player.speed = (CONFIG.player.speed > 4) ? CONFIG.player.speed -= 1 : 1
-
+      CONFIG.player.speed = (CONFIG.player.speed > 4) ? CONFIG.player.speed -= 1 : 3
     },
     "green": function green() {
-      CONFIG.player.speed *= 1.5
+      CONFIG.player.speed = 13
     }
 }
 
@@ -269,12 +249,11 @@ function playerMoved() {
 var outOfTime = false
 // timer function
 function startTimer(duration) {
-  var timer = duration,
-    minutes, seconds
+  var timer = duration, minutes, seconds
 
   setInterval(function() {
     if (!outOfTime) {
-      console.log("RUNNING!!")
+
       minutes = parseInt(timer / 60, 10)
       seconds = parseInt(timer % 60, 10)
 
@@ -282,14 +261,10 @@ function startTimer(duration) {
       seconds = seconds < 10 ? "0" + seconds : seconds
 
       currentTime = minutes + ":" + seconds
-
-      if (--timer < 0) {
-        // timer = duration
-        console.log("done!")
+      if (--timer < -1) {
         outOfTime = true
         gameOver()
       }
     }
   }, 1000)
-  // }, 1000)
 }
