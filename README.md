@@ -15,5 +15,7 @@ This game was originally developed for Playfab Hackathon 2015. The project has b
 - Kristoffer Hebert
 
 ## Other Credits
-- Graphics - Daniel Cook - lostgarden 
+- BG Graphics - Daniel Cook - lostgarden 
+- Potion Graphics - Programmer16
 - Music - Win32
+- SFX bradwesson
