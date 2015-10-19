@@ -14,7 +14,9 @@
 		player: {
 			speed: 5
 		},
-		timeText: null
+		timeText: null,
+        scoreUrl: '/scores',
+        scores: null
 	}
 
 	var game = new Phaser.Game(CONFIG.screen.w, CONFIG.screen.h, Phaser.AUTO, 'game', {
@@ -97,10 +99,10 @@
 		request.onreadystatechange = function() {
 			if (request.readyState === 4 && request.status === 200) {
 				// success
-				callback(null, request.responseText)
+				callback(null, request)
 			} else {
 				// error callback
-				callback(true)
+				callback(true, request)
 			}
 		}
 
@@ -108,6 +110,18 @@
 		request.open(method, url)
 		request.send(null)
 	}
+
+    function getScores(){
+        XHR('GET', CONFIG.scoreUrl, function handleResponse(err, response){
+            if(err){
+                console.log(response)
+                throw "something went wrong"
+            }
+
+            return  JSON.parse(response.responseText)
+
+        })
+    }
 
 	function create() {
 		console.log("CREATE")
