@@ -46,7 +46,7 @@
 
 	var scoreText
 
-	var playTime = 0.1 //in minutes
+	var playTime = 1 //in minutes
 	var currentTime = "1:00"
 
 	var potionTypes = ["green", "yellow", "red"]
@@ -90,7 +90,24 @@
 		return potion
 	}
 
+	function XHR(method, url, callback) {
+		var request = new XMLHttpRequest()
 
+		// when request returns a result set state
+		request.onreadystatechange = function() {
+			if (request.readyState === 4 && request.status === 200) {
+				// success
+				callback(null, request.responseText)
+			} else {
+				// error callback
+				callback(true)
+			}
+		}
+
+		// configure method and url via props.data string
+		request.open(method, url)
+		request.send(null)
+	}
 
 	function create() {
 		console.log("CREATE")
@@ -108,7 +125,7 @@
 
 		potiongetsound = game.add.audio('getpotion', true)
 
-		// NOTE: Drug Setup
+		// NOTE: Potion Setup
 		potions = game.add.group()
 		potions.enableBody = true
 		potions.physicsBodyType = Phaser.Physics.ARCADE
