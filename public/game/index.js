@@ -92,7 +92,7 @@
 		return potion
 	}
 
-	function XHR(method, url, callback) {
+	function XHR(method, url, data, callback) {
 		var request = new XMLHttpRequest()
 
 		// when request returns a result set state
@@ -108,7 +108,11 @@
 
 		// configure method and url via props.data string
 		request.open(method, url)
-		request.send(null)
+
+        if(!data){
+            data = null
+        }
+        request.send(data)
 	}
 
     function getScores(){
@@ -118,7 +122,19 @@
                 throw "something went wrong"
             }
 
-            return  JSON.parse(response.responseText)
+            return JSON.parse(response.responseText)
+
+        })
+    }
+
+    function saveScores(scoreObject){
+        XHR('POST', CONFIG.scoreUrl, scoreObject ,function handleResponse(err, response){
+            if(err){
+                console.log(response)
+                throw "something went wrong"
+            }
+
+            return JSON.parse(response.responseText)
 
         })
     }
@@ -233,6 +249,8 @@
 		endgameText.text = "- Game Over! -"
 		endgameText.visible = true
 		game.paused = true
+        // do game over stuff
+        console.log(getScores())
 	}
 
 	function playerHitpotion(_player, _potion) {
