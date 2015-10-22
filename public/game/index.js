@@ -92,53 +92,7 @@
 		return potion
 	}
 
-	function XHR(method, url, data, callback) {
-		var request = new XMLHttpRequest()
-
-		// when request returns a result set state
-		request.onreadystatechange = function() {
-			if (request.readyState === 4 && request.status === 200) {
-				// success
-				callback(null, request)
-			} else {
-				// error callback
-				callback(true, request)
-			}
-		}
-
-		// configure method and url via props.data string
-		request.open(method, url)
-
-        if(!data){
-            data = null
-        }
-        request.send(data)
-	}
-
-    function getScores(){
-        XHR('GET', CONFIG.scoreUrl, function handleResponse(err, response){
-            if(err){
-                console.log(response)
-                throw "something went wrong"
-            }
-
-            return JSON.parse(response.responseText)
-
-        })
-    }
-
-    function saveScores(scoreObject){
-        XHR('POST', CONFIG.scoreUrl, scoreObject ,function handleResponse(err, response){
-            if(err){
-                console.log(response)
-                throw "something went wrong"
-            }
-
-            return JSON.parse(response.responseText)
-
-        })
-    }
-
+	
 	function create() {
 		console.log("CREATE")
 
