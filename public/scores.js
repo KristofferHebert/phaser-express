@@ -39,14 +39,28 @@ Scores.getScores = function getScores() {
 	return Scores.XHR('GET', '/scores', null)
 }
 
-Scores.displayScores = function() {
-	Scores.getScores()
-		.then(function handleResponse(response) {
-			console.log(JSON.parse(response))
-		})
-		.catch(function(err) {
-			console.error('Augh, there was an error!', err.statusText)
-		})
+Scores.renderScores = function renderScores(scoresArray, nameArray){
+    var results = scoresArray.map(function(value, index){
+        return '<td>:' + value + ' </td><td>Name:' + nameArray[index] + '</td>'
+    })
+    console.log(results)
+    return results
+}
+
+Scores.displayScores = function(selectorId) {
+    function handleResponse(response) {
+        var container document.getElementById(selectorId)
+        var score = JSON.parse(response)
+        container.appendChild(Scores.renderScores(score.scores, score.names))
+    }
+
+    function handleError(err) {
+		console.error('Augh, there was an error!', err)
+	}
+
+    Scores.getScores()
+		.then(handleResponse)
+		.catch(handleError)
 }
 
 Scores.saveScores = function saveScores(scoreObject) {
