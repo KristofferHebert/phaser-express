@@ -1,11 +1,15 @@
 // (function () {
 
 var Scores = {}
-
+var mockScore = {
+    scores: [100],
+    names: ['Fred']
+}
 Scores.XHR = function XHR(method, url, data) {
 	return new Promise(function(resolve, reject) {
 		var request = new XMLHttpRequest()
 		request.open(method, url)
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
 		request.onreadystatechange = function() {
 			request.onload = function() {
 				if (this.status >= 200 && this.status < 300) {
@@ -26,10 +30,6 @@ Scores.XHR = function XHR(method, url, data) {
 
 		}
 
-
-		if (!data) {
-			var data = null
-		}
 		request.send(data)
 	})
 
@@ -49,7 +49,7 @@ Scores.renderScores = function renderScores(scoresArray, nameArray){
 
 Scores.displayScores = function(selectorId) {
     function handleResponse(response) {
-        var container document.getElementById(selectorId)
+        var container = document.getElementById(selectorId)
         var score = JSON.parse(response)
         container.appendChild(Scores.renderScores(score.scores, score.names))
     }
@@ -64,15 +64,17 @@ Scores.displayScores = function(selectorId) {
 }
 
 Scores.saveScores = function saveScores(scoreObject) {
-	XHR('POST', '/scores', scoreObject, function handleResponse(err, response) {
-		if (err) {
-			console.log(response)
-			throw "something went wrong"
-		}
+    function handleError(err) {
+		console.error('Augh, there was an error!', err)
+	}
 
-		return JSON.parse(response.responseText)
+    function handleResponse(response) {
+        JSON.parse(response.responseText)
+	}
 
-	})
+    Scores.XHR('POST', '/scores', scoreObject)
+        .then(handleResponse)
+        .catch(handleError)
 }
 
 //     return Scores

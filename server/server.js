@@ -39,40 +39,47 @@ app.get('/', function(req, res) {
 })
 
 // Middleware
-function checkToken(req, res, next){
+function checkToken(req, res, next) {
 	let reqToken = req.body.csrf
+	console.log('has token', reqToken)
 	if (!tokens.verify(secret, reqToken)) {
-  		return res.status(500)
+		console.log('invalid token')
+		return res.status(500)
 			.send({
 				error: "Invalid Token"
 			})
 	}
+	console.log('valid token')
 	next()
 }
 
-function getScores(req, res){
+function getScores(req, res) {
 	let scores = jsonFile.readFileSync(DB)
 	return res.json(scores)
 }
 
-function writeScores(req, res){
-	let {names, scores} =  req.body
+function writeScores(req, res) {
+	let names = req.body.names
+	let scores = req.body.scores
 
-	if(names && scores){
+	if (names && scores) {
+
 		let newScores = {
-				names: names,
-				scores: scores
-			}
+			names: names,
+			scores: scores
+		}
 
-		json.writeFileSync(DB, newScores)
+		console.log('saving to db', newScores)
+		jsonFile.writeFileSync(DB, newScores)
 
-		return getScores(req, res)
+		let scores = jsonFile.readFileSync(DB)
+		return res.json(scores)
 	}
 
 	return res.status(500)
 		.send({
 			error: "Invalid Request"
-	})
+		})
 }
 
 app.get('/scores', getScores)
