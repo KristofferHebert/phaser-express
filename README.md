@@ -6,7 +6,7 @@ Collect Green potions to move faster. Yellow and Red potions will slow you down.
 - Kristoffer Hebert
 
 ## Original developers
-This game was originally developed for Seattle Playfab Hackathon 2015. The project has been refactored and continued by Kristoffer Hebert.
+This game was originally developed for Seattle Playfab Hackathon in 2015. The project has been refactored and continued by Kristoffer Hebert.
  
 - Yonas Berhe
 - Louis Vichy
