@@ -59,27 +59,27 @@ function getScores(req, res) {
 }
 
 function writeScores(req, res) {
-	let names = req.body.names
-	let scores = req.body.scores
 
-	if (names && scores) {
+	if (req.body.names && req.body.scores) {
 
 		let newScores = {
-			names: names,
-			scores: scores
+			names: req.body.names,
+			scores: req.body.scores
 		}
 
 		console.log('saving to db', newScores)
 		jsonFile.writeFileSync(DB, newScores)
 
 		let scores = jsonFile.readFileSync(DB)
-		return res.json(scores)
+		res.json(scores)
+	} else {
+		res.status(500)
+			.send({
+				error: "Invalid Request"
+			})
 	}
 
-	return res.status(500)
-		.send({
-			error: "Invalid Request"
-		})
+
 }
 
 app.get('/scores', getScores)

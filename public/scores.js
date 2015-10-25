@@ -69,7 +69,8 @@ Scores.saveScores = function saveScores(scoreObject) {
 	}
 
     function handleResponse(response) {
-        JSON.parse(response.responseText)
+        // render
+        alert(response)
 	}
 
     Scores.XHR('POST', '/scores', scoreObject)
