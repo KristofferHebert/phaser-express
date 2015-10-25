@@ -3,8 +3,16 @@
 var Scores = {}
 var mockScore = {
     scores: [100],
-    names: ['Fred']
+    names: ['Fred'],
 }
+
+function renderMock(){
+    mockScore.csrf = csrf
+    console.log(mockScore)
+    var mock = JSON.stringify(mockScore)
+    Scores.saveScores(mock)
+}
+
 Scores.XHR = function XHR(method, url, data) {
 	return new Promise(function(resolve, reject) {
 		var request = new XMLHttpRequest()
@@ -40,6 +48,7 @@ Scores.getScores = function getScores() {
 }
 
 Scores.renderScores = function renderScores(scoresArray, nameArray){
+    console.log(scoresArray)
     var results = scoresArray.map(function(value, index){
         return '<td>:' + value + ' </td><td>Name:' + nameArray[index] + '</td>'
     })
@@ -70,7 +79,8 @@ Scores.saveScores = function saveScores(scoreObject) {
 
     function handleResponse(response) {
         // render
-        alert(response)
+        var r = JSON.parse(response)
+        Scores.renderScores(r.scores, r.numbers)
 	}
 
     Scores.XHR('POST', '/scores', scoreObject)
