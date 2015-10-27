@@ -1,6 +1,6 @@
 ## Phaser HTML5 Game - powered by Express
 
-Collect Green potions to move faster. Yellow and Red potions will slow you down. Gain the highest score possible in 1 minute. Compete for highest score on leaderboard.
+Collect Green potions to move faster. Yellow and Red potions will slow you down. Aim for the highest score possible in 1 minute. Compete for highest score on the leaderboard.
 
 ## Current Developer
 - Kristoffer Hebert
