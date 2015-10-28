@@ -8,7 +8,6 @@ var mockScore = {
 
 function renderMock(){
     mockScore.csrf = csrf
-    console.log(mockScore)
     var mock = JSON.stringify(mockScore)
     Scores.saveScores(mock)
 }
@@ -16,7 +15,8 @@ function renderMock(){
 Scores.XHR = function XHR(method, url, data) {
 	return new Promise(function(resolve, reject) {
 		var request = new XMLHttpRequest()
-		request.open(method, url)
+
+    	request.open(method, url)
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
 		request.onreadystatechange = function() {
 			request.onload = function() {
@@ -60,6 +60,7 @@ Scores.displayScores = function(selectorId) {
     function handleResponse(response) {
         var container = document.getElementById(selectorId)
         var score = JSON.parse(response)
+
         container.appendChild(Scores.renderScores(score.scores, score.names))
     }
 
