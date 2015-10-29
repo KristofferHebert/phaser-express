@@ -3,7 +3,7 @@
 var Scores = {}
 var mockScore = {
     scores: [100],
-    names: ['Fred'],
+    names: ['Fred']
 }
 
 function renderMock(){
