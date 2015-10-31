@@ -2,6 +2,8 @@
 
 Collect Green potions to move faster. Yellow and Red potions will slow you down. Aim for the highest score possible in 1 minute. Compete for highest score on the leaderboard.
 
+magicpotion.hirekris.com
+
 ## Current Developer
 - Kristoffer Hebert
 
