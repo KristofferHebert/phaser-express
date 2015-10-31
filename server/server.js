@@ -86,7 +86,7 @@ app.get('/scores', getScores)
 
 app.post('/scores', checkToken, writeScores)
 
-console.log('Listening on port 3000')
-let server = app.listen(3000)
+console.log('Listening on port 3006')
+let server = app.listen(3006)
 
 export default server
