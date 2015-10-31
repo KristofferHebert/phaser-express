@@ -268,7 +268,8 @@
 				currentTime = minutes + ":" + seconds
 				if (--timer < -1) {
 					outOfTime = true
-					gameOver()
+					// TODO: add ability to save score
+                                        //gameOver()
 				}
 			}
 		}, 1000)
